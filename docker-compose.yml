@@ -1,22 +1,23 @@
-version: '3'
+version: '3.8'
 
 services:
-  payload:
-    image: node:20-alpine
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
+    restart: always
     depends_on:
       - mongo
-      # - postgres
     env_file:
       - .env
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      # تأكد من أن رابط قاعدة البيانات في .env أو هنا يشير إلى الخدمة mongo:
+      # DATABASE_URI=mongodb://mongo:27017/payload-db
 
-  # Ensure your DATABASE_URL uses 'mongo' as the hostname ie. mongodb://mongo/my-db-name
   mongo:
     image: mongo:latest
     ports:
@@ -24,20 +25,8 @@ services:
     command:
       - --storageEngine=wiredTiger
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
-
-  # Uncomment the following to use postgres
-  # postgres:
-  #   restart: always
-  #   image: postgres:latest
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
+      - mongo_data:/data/db
+    restart: always
 
 volumes:
-  data:
-  # pgdata:
-  node_modules:
+  mongo_data:

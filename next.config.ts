@@ -10,7 +10,22 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       {
-        pathname: '/api/media/file/**',
+        pathname: '/**',
+        search: '',
+      },
+    ],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '**',
+        port: '3000',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

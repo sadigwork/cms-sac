@@ -1,0 +1,45 @@
+/* تخصيص الثيم الخاص بالمجلس الزراعي */
+:root {
+  /* ألوان الهوية الرئيسية (الزمردي/الزيتي) */
+  --theme-bg: #f8fafc;
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: #f1f5f9;
+  --theme-elevation-100: #ffffff;
+  --theme-elevation-150: #e2e8f0;
+
+  --theme-success-500: #059669;
+  --theme-success-600: #047857;
+
+  /* لون التركيز والأزرار */
+  --theme-elevation-800: #064e3b;
+  --theme-elevation-900: #022c22;
+}
+
+/* ضبط الاتجاه RTL */
+[dir='rtl'] {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+/* تخصيص شكل الأزرار الرئيسية في اللوحة */
+.btn--style-primary {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  border-radius: 0.5rem !important;
+}
+
+.btn--style-primary:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
+/* تخصيص شريط القائمة الجانبية nav */
+.nav {
+  background-color: #0f172a !important;
+}

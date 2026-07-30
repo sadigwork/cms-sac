@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+/* @import 'tailwindcss/components';
+@import 'tailwindcss/utilities'; */
+
+/* أضف هنا أي تخصيصات إضافية للهوية */
+:root {
+  --theme-bg: #0f172a;
+}

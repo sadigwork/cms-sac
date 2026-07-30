@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     services: Service;
     tags: Tag;
+    registrations: Registration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    registrations: RegistrationsSelect<false> | RegistrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -135,6 +137,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
+  roles?: ('admin' | 'editor' | 'registrar')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -252,6 +256,43 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations".
+ */
+export interface Registration {
+  id: number;
+  fullName: string;
+  nationalId: string;
+  email: string;
+  phone: string;
+  gender: 'male' | 'female';
+  dateOfBirth: string;
+  state: string;
+  degree: 'bsc' | 'higher_diploma' | 'msc' | 'phd';
+  specialization: string;
+  university: string;
+  graduationYear: number;
+  personalPhoto: number | Media;
+  degreeCertificate: number | Media;
+  nationalIdCard: number | Media;
+  additionalDocuments?:
+    | {
+        title?: string | null;
+        file: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'pending' | 'provisionally_approved' | 'approved' | 'rejected' | 'action_required';
+  /**
+   * Issued upon final approval
+   */
+  registrationNumber?: string | null;
+  rejectionReason?: string | null;
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -297,6 +338,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tags';
         value: number | Tag;
+      } | null)
+    | ({
+        relationTo: 'registrations';
+        value: number | Registration;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -345,6 +390,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -436,6 +483,39 @@ export interface ServicesSelect<T extends boolean = true> {
 export interface TagsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations_select".
+ */
+export interface RegistrationsSelect<T extends boolean = true> {
+  fullName?: T;
+  nationalId?: T;
+  email?: T;
+  phone?: T;
+  gender?: T;
+  dateOfBirth?: T;
+  state?: T;
+  degree?: T;
+  specialization?: T;
+  university?: T;
+  graduationYear?: T;
+  personalPhoto?: T;
+  degreeCertificate?: T;
+  nationalIdCard?: T;
+  additionalDocuments?:
+    | T
+    | {
+        title?: T;
+        file?: T;
+        id?: T;
+      };
+  status?: T;
+  registrationNumber?: T;
+  rejectionReason?: T;
+  adminNotes?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -698,7 +698,8 @@ function getMediaUrl(imageField: any): string {
 }
 
 export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params
+  const resolvedParams = await params
+  const locale = String(resolvedParams.locale)
   const isRtl = locale === 'ar'
   const payload = await getPayload({ config: configPromise })
 

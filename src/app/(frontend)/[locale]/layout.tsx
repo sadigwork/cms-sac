@@ -2,18 +2,14 @@ import React from 'react'
 import type { Metadata } from 'next'
 import './styles.css'
 import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 
 // 1. تعريف المسارات اللغوية المدعومة بناءً للإنتاج
 export async function generateStaticParams() {
   return [{ locale: 'ar' }, { locale: 'en' }]
 }
 
-// export const metadata = {
-//   description: 'A blank template using Payload in a Next.js app.',
-//   title: 'Payload Blank Template',
-// }
-
-// 2. توليد الميتاداتا العامة للموقع بناءً على اللغة الحالية
+// 2. توليد الميتاداتا العامة للموقع بناءً على اللغة الحالية (SEO + OpenGraph)
 export async function generateMetadata({
   params,
 }: {
@@ -57,7 +53,7 @@ export async function generateMetadata({
       type: 'website',
       images: [
         {
-          url: '/og-image.jpg', // ضع صورة رسمية للمجلس بدقة 1200x630 داخل مجلد public
+          url: '/og-image.jpg',
           width: 1200,
           height: 630,
           alt: siteName,
@@ -98,25 +94,21 @@ export default async function RootLayout({
   children: React.ReactNode
   params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
+  const resolveParams = await params
+  const locale = String(resolveParams.locale).toLowerCase()
   const isRtl = locale === 'ar'
 
   return (
     <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'}>
       <body className="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col justify-between">
+        {/* شريط الملاحة الرئيسي المحدث مع دعم زر تغيير اللغة */}
         <Navbar locale={locale} />
+
+        {/* محتوى الصفحة الرئيسي */}
         <main className="flex-grow">{children}</main>
 
-        {/* Footer بسيط وموحد */}
-        <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-16 text-xs text-center">
-          <div className="max-w-7xl mx-auto px-6 space-y-2">
-            <p>
-              {isRtl
-                ? `© ${new Date().getFullYear()} جميع الحقوق محفوظة - المجلس الزراعي السوداني`
-                : `© ${new Date().getFullYear()} All rights reserved - Sudanese Agricultural Council`}
-            </p>
-          </div>
-        </footer>
+        {/* المكون الاحترافي للـ Footer */}
+        <Footer locale={locale} />
       </body>
     </html>
   )

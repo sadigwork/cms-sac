@@ -1,4 +1,4 @@
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -19,6 +19,33 @@ import { Ticker } from './globals/Ticker'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const shouldEnableEmail = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS
+
+// إعداد محول البريد بشرط وجود البيئة، وإلا عدم تفعيله
+// const getEmailAdapter = () => {
+//   try {
+//     if (process.env.SMTP_HOST && process.env.SMTP_USER) {
+//       return nodemailerAdapter({
+//         defaultFromAddress: process.env.SMTP_FROM || 'sadigatwork@outlook.com',
+
+//         defaultFromName: 'المجلس الزراعي السوداني',
+//         transportOptions: {
+//           host: process.env.SMTP_HOST,
+//           port: Number(process.env.SMTP_PORT) || 587,
+//           auth: {
+//             user: process.env.SMTP_USER,
+//             pass: process.env.SMTP_PASS,
+//           },
+//           // حماية التوصيل عبر ضبط مهلة أقصاها 3 ثوانٍ
+//           connectionTimeout: 3000,
+//         },
+//       })
+//     }
+//   } catch (err) {
+//     console.warn('⚠️ فشل تهيئة Nodemailer Adapter:', err)
+//   }
+//   return undefined
+// }
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -31,17 +58,20 @@ export default buildConfig({
     },
     components: {
       graphics: {
-        Logo: '/components/admin/Logo#Logo',
-        Icon: '/components/admin/Logo#Logo', // تصحيح المسار ليكون معرّفاً في Logo.tsx
+        Logo: '/components/admin/Logo#PlantIcon',
+        Icon: '/components/admin/Icon#Icon', // تصحيح المسار ليكون معرّفاً في Logo.tsx
       },
+      beforeDashboard: [
+        '/components/admin/CustomDashboard#CustomDashboard',
+      ],
       views: {
         login: {
           Component: '/components/admin/CustomLogin#CustomLogin',
           path: '/login',
         },
-        dashboard: {
-          Component: '/components/admin/CustomDashboard#CustomDashboard',
-        },
+        // dashboard: {
+        //   Component: '/components/admin/CustomDashboard#CustomDashboard',
+        // },
       },
     },
   },
@@ -68,23 +98,28 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: 'info@agricouncil.gov.sd',
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
     defaultFromName: 'المجلس الزراعي السوداني',
-    transportOptions: {
-      host: process.env.SMTP_HOST || 'smtp.office365.com',
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS, // تأكد من استخدام App Password وليس كلمة المرور العادية
-      },
-      // إضافة الخيارات التالية لمنع التعليق والانتظار طويل الأمد
-      connectionTimeout: 3000, // 3 ثواني كحد أقصى للاتصال
-      greetingTimeout: 3000,
-      socketTimeout: 5000,
-    },
+    apiKey: process.env.RESEND_API_KEY || '',
   }),
+  // nodemailerAdapter({
+  //   defaultFromAddress: 'info@agricouncil.gov.sd',
+  //   defaultFromName: 'المجلس الزراعي السوداني',
+  //   transportOptions: {
+  //     host: process.env.SMTP_HOST || 'smtp.office365.com',
+  //     port: Number(process.env.SMTP_PORT) || 587,
+  //     secure: false,
+  //     auth: {
+  //       user: process.env.SMTP_USER,
+  //       pass: process.env.SMTP_PASS, // تأكد من استخدام App Password وليس كلمة المرور العادية
+  //     },
+  //     // إضافة الخيارات التالية لمنع التعليق والانتظار طويل الأمد
+  //     connectionTimeout: 3000, // 3 ثواني كحد أقصى للاتصال
+  //     greetingTimeout: 3000,
+  //     socketTimeout: 5000,
+  //   },
+  // }),
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URL || '',

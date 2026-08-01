@@ -44,9 +44,18 @@
 // }
 
 import React from 'react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { CustomDashboardClient } from './CustomDashboardClient'
 
-// مكون سيرفر خالص بدون 'use client'
-export const CustomDashboard: React.FC = () => {
-  return <CustomDashboardClient />
+export const CustomDashboard = async () => {
+  const payload = await getPayload({ config })
+  
+  // جلب أسماء وبيانات المجموعات المسجلة ديناميكياً في النظام
+  const collections = payload.config.collections.map((col) => ({
+    slug: col.slug,
+    label: typeof col.labels?.plural === 'string' ? col.labels.plural : col.slug,
+  }))
+
+  return <CustomDashboardClient collections={collections} />
 }

@@ -2,20 +2,57 @@
 /* @import 'tailwindcss/components';
 @import 'tailwindcss/utilities'; */
 
-/* أضف هنا أي تخصيصات إضافية للهوية */
-
+/* تخصيص المتغيرات الخاصة بـ Payload CMS في كافة الصفحات والمجموعات */
 :root {
-  --theme-emerald-600: #059669;
+  /* الألوان الأساسية - الزمردي للمجلس الزراعي */
+  --theme-bg: #0f172a; /* Slate 900 */
+  --theme-elevation-50: #020617; /* Slate 950 */
+  --theme-elevation-100: #0f172a; /* Slate 900 */
+  --theme-elevation-150: #1e293b; /* Slate 800 */
+  --theme-elevation-200: #334155; /* Slate 700 */
   --theme-emerald-700: #047857;
+  --theme-emerald-600: #059669;
+  
+  --theme-input-bg: #020617;
+  
+  /* لون الإبراز والتفاعل (Primary / Accent) */
+  --theme-success-500: #10b981;
+  --theme-success-600: #059669;
+  
+  /* ألوان النصوص */
+  --theme-text: #f8fafc;
 }
 
+
+
+/* ضبط الاتجاه للعربية في كافة صفحات المجموعات */
+html[dir="rtl"] .payload-admin-wrap,
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
   direction: rtl;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* تخصيص شريط الملاحة القائم على اليسار/اليمين */
+.nav {
+  background-color: #0f172a !important;
+  border-left: 1px solid #1e293b !important;
+}
+
+/* تخصيص أزرار الإجراءات داخل المجموعات */
+.btn--style-primary {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border-radius: 0.75rem !important;
+}
+
+.btn--style-primary:hover {
+  background-color: #047857 !important;
+}
+
+/* تخصيص رأس الجدول والجداول الداخلية */
+.collection-list__wrap table {
+  background-color: #0f172a !important;
+  border-radius: 1rem !important;
+  overflow: hidden;
+}
+

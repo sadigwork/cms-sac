@@ -61,17 +61,17 @@ export default buildConfig({
         Logo: '/components/admin/Logo#PlantIcon',
         Icon: '/components/admin/Icon#Icon', // تصحيح المسار ليكون معرّفاً في Logo.tsx
       },
-      beforeDashboard: [
-        '/components/admin/CustomDashboard#CustomDashboard',
-      ],
+      // beforeDashboard: [
+      //   '/components/admin/CustomDashboard#CustomDashboard',
+      // ],
       views: {
         login: {
           Component: '/components/admin/CustomLogin#CustomLogin',
           path: '/login',
         },
-        // dashboard: {
-        //   Component: '/components/admin/CustomDashboard#CustomDashboard',
-        // },
+        dashboard: {
+          Component: '/components/admin/CustomDashboard#CustomDashboard',
+        },
       },
     },
   },

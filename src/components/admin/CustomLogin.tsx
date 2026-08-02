@@ -100,10 +100,32 @@
 // }
 // 'use client'
 
+// import React from 'react'
+// import { CustomLoginClient } from './CustomLoginClient'
+
+// // استقبال كافة الـ props القادمة من Payload لتجنب خطأ الـ config
+// export const CustomLogin: React.FC<any> = (props) => {
+//   return <CustomLoginClient {...props} />
+// }
+/* src/components/admin/CustomLogin.tsx */
+// import React from 'react'
+// import { DefaultTemplate } from '@payloadcms/next/templates'
+// import { CustomLoginClient } from './CustomLoginClient'
+// import type { AdminViewProps } from 'payload'
+
+// export const CustomLogin: React.FC<AdminViewProps> = (props) => {
+//   // تمرير الـ props لـ DefaultTemplate يحل مشكلة الـ config كلياً في السيرفر
+//   return (
+//     <DefaultTemplate {...props}>
+//       <CustomLoginClient />
+//     </DefaultTemplate>
+//   )
+// }
 import React from 'react'
 import { CustomLoginClient } from './CustomLoginClient'
 
-// مكون سيرفر خالص بدون 'use client' وبدون استقبال أي Props من Payload
 export const CustomLogin: React.FC = () => {
   return <CustomLoginClient />
 }
+
+export default CustomLogin

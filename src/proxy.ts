@@ -35,12 +35,24 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // 1. إعادة التوجيه من / إلى /ar
   if (pathname === '/') {
     return NextResponse.redirect(new URL('/ar', request.url))
+  }
+  // استثناء مطلق لمسارات Payload
+  if (
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/worker-') ||
+    pathname.endsWith('.js') ||
+    pathname.endsWith('.css') ||
+    pathname.includes('.')
+  ) {
+    return NextResponse.next()
   }
 
   // 2. التحقق من وجود اللغة في باقي مسارات الواجهة
